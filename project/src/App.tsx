@@ -21,7 +21,7 @@ function App() {
     <LevelProvider>
       <ProgressProvider>
         <EventProvider>
-          <Router basename="/karo-.language-.l">
+          <Router basename="/-https-github.com-yourusername-karo-language-app/">
             <div className="min-h-screen flex flex-col bg-background">
               <Header />
               <main className="flex-grow container mx-auto p-6 lg:p-8">
