@@ -24,10 +24,24 @@ export default {
         gray: {
           750: '#374151',
           850: '#1f2937',
-        }
+        },
+        'primary': '#4A46C6',
+        'secondary': '#F0F0F8',
+        'background': '#F9FAFB',
+        'text-primary': '#1E1E3C',
+        'text-secondary': '#6B6B80',
+        'accent': '#F9A826',
       },
       backdropBlur: {
         xs: '2px',
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        display: ['Poppins', 'sans-serif'],
+      },
+      boxShadow: {
+        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.07)',
       }
     },
   },

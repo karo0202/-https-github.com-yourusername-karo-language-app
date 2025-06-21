@@ -12,28 +12,37 @@ import QuizSystem from './components/QuizSystem';
 import StudyPlanner from './components/StudyPlanner';
 import VocabularyBuilder from './components/VocabularyBuilder';
 import { LevelProvider } from './context/LevelContext';
+import { EventProvider } from './context/EventContext';
+import { ProgressProvider } from './context/ProgressContext';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   return (
     <LevelProvider>
-      <div className="min-h-screen bg-gray-100 font-sans">
-        <Header />
-        <main className="p-8">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/ai-assistant" element={<AIAssistant />} />
-            <Route path="/community-hub" element={<CommunityHub />} />
-            <Route path="/conversation-practice" element={<ConversationPractice />} />
-            <Route path="/level-selection" element={<LevelSelection />} />
-            <Route path="/live-tutoring" element={<LiveTutoring />} />
-            <Route path="/notification-center" element={<NotificationCenter />} />
-            <Route path="/progress-tracking" element={<ProgressTracking />} />
-            <Route path="/quiz" element={<QuizSystem />} />
-            <Route path="/study-planner" element={<StudyPlanner />} />
-            <Route path="/vocabulary-builder" element={<VocabularyBuilder />} />
-          </Routes>
-        </main>
-      </div>
+      <ProgressProvider>
+        <EventProvider>
+          <Router basename="/karo-.language-.l">
+            <div className="min-h-screen flex flex-col bg-background">
+              <Header />
+              <main className="flex-grow container mx-auto p-6 lg:p-8">
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/ai-assistant" element={<AIAssistant />} />
+                  <Route path="/community-hub" element={<CommunityHub />} />
+                  <Route path="/conversation-practice" element={<ConversationPractice />} />
+                  <Route path="/level-selection" element={<LevelSelection />} />
+                  <Route path="/live-tutoring" element={<LiveTutoring />} />
+                  <Route path="/notification-center" element={<NotificationCenter />} />
+                  <Route path="/progress-tracking" element={<ProgressTracking />} />
+                  <Route path="/quiz" element={<QuizSystem />} />
+                  <Route path="/study-planner" element={<StudyPlanner />} />
+                  <Route path="/vocabulary-builder" element={<VocabularyBuilder />} />
+                </Routes>
+              </main>
+            </div>
+          </Router>
+        </EventProvider>
+      </ProgressProvider>
     </LevelProvider>
   );
 }

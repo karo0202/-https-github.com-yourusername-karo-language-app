@@ -1,56 +1,46 @@
 import { useLevel } from '../context/LevelContext';
-import { CheckCircle, Star, Target, Trophy } from 'lucide-react';
+import { Zap, Shield, BarChart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const levels = [
-  {
-    id: 'Beginner',
-    title: 'Beginner',
-    description: 'Start with basic vocabulary and simple conversations.',
-    icon: Star,
-    color: 'from-green-500 to-green-600',
-  },
-  {
-    id: 'Intermediate',
-    title: 'Intermediate',
-    description: 'Build confidence with more complex sentences.',
-    icon: Target,
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    id: 'Advanced',
-    title: 'Advanced',
-    description: 'Master nuanced expressions and professional topics.',
-    icon: Trophy,
-    color: 'from-purple-500 to-purple-600',
-  },
+type Level = 'Beginner' | 'Intermediate' | 'Advanced';
+
+const levels: { name: Level, icon: React.ElementType, description: string }[] = [
+  { name: 'Beginner', icon: Zap, description: 'Start with the basics. Learn essential vocabulary and grammar.' },
+  { name: 'Intermediate', icon: Shield, description: 'Build on your foundation. Tackle more complex sentences.' },
+  { name: 'Advanced', icon: BarChart, description: 'Master the language. Engage in nuanced conversations.' },
 ];
 
 function LevelSelection() {
-  const { level, setLevel } = useLevel();
+  const { setLevel } = useLevel();
+  const navigate = useNavigate();
+
+  const handleLevelSelect = (level: Level) => {
+    setLevel(level);
+    navigate('/');
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Choose Your Learning Path</h1>
-        <p className="text-lg text-gray-600">Select the level that best matches your current ability.</p>
+        <h1 className="text-4xl font-bold">Choose Your Level</h1>
+        <p className="text-lg text-text-secondary mt-2">Select your current proficiency to personalize your learning experience.</p>
       </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {levels.map((levelOption) => (
-          <button
-            key={levelOption.id}
-            onClick={() => setLevel(levelOption.id as 'Beginner' | 'Intermediate' | 'Advanced')}
-            className={`bg-gradient-to-br ${levelOption.color} text-white p-8 rounded-2xl shadow-lg hover:scale-105 transform transition-transform duration-300 text-left relative`}
+        {levels.map((level) => (
+          <div 
+            key={level.name} 
+            onClick={() => handleLevelSelect(level.name)}
+            className="group bg-white p-8 rounded-2xl shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-300 cursor-pointer text-center"
           >
-            {level === levelOption.id && (
-              <div className="absolute top-4 right-4 bg-white text-green-500 rounded-full p-1">
-                <CheckCircle className="w-6 h-6" />
-              </div>
-            )}
-            <levelOption.icon className="w-12 h-12 mb-4" />
-            <h2 className="text-2xl font-bold mb-2">{levelOption.title}</h2>
-            <p className="opacity-90">{levelOption.description}</p>
-          </button>
+            <div className="flex items-center justify-center w-16 h-16 bg-secondary rounded-full mx-auto mb-6">
+              <level.icon className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold mb-2">{level.name}</h2>
+            <p className="text-text-secondary mb-6">{level.description}</p>
+            <span className="font-semibold text-primary group-hover:underline">
+              Select Level
+            </span>
+          </div>
         ))}
       </div>
     </div>

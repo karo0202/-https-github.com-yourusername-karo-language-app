@@ -1,38 +1,40 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Brain, MessageCircle, Trophy, Users, Calendar, BarChart2 } from 'lucide-react';
 import { useLevel } from '../context/LevelContext';
+import { BarChart2, BookOpen, MessageSquare, Users, GraduationCap, Calendar, Bot, Bell } from 'lucide-react';
 
 const featureCards = [
-  { path: '/level-selection', title: 'Select Your Level', description: 'Choose a difficulty that suits you.', icon: Trophy, color: 'from-blue-500 to-blue-600' },
-  { path: '/vocabulary-builder', title: 'Vocabulary Builder', description: 'Learn and master new words.', icon: BookOpen, color: 'from-green-500 to-green-600' },
-  { path: '/quiz', title: 'Take a Quiz', description: 'Test your knowledge and skills.', icon: Brain, color: 'from-purple-500 to-purple-600' },
-  { path: '/conversation-practice', title: 'Conversation Practice', description: 'Hone your speaking abilities.', icon: MessageCircle, color: 'from-orange-500 to-orange-600' },
-  { path: '/study-planner', title: 'Study Planner', description: 'Organize your learning schedule.', icon: Calendar, color: 'from-teal-500 to-teal-600' },
-  { path: '/progress-tracking', title: 'Track Progress', description: 'Monitor your achievements.', icon: BarChart2, color: 'from-indigo-500 to-indigo-600' },
-  { path: '/community-hub', title: 'Community Hub', description: 'Connect with other learners.', icon: Users, color: 'from-pink-500 to-pink-600' },
+  { title: "Select Level", icon: GraduationCap, path: "/levels", description: "Choose your proficiency level." },
+  { title: "Vocabulary", icon: BookOpen, path: "/vocabulary", description: "Build your word bank." },
+  { title: "Quiz", icon: MessageSquare, path: "/quiz", description: "Test your knowledge." },
+  { title: "AI Practice", icon: Bot, path: "/practice", description: "Chat with an AI." },
+  { title: "Study Planner", icon: Calendar, path: "/planner", description: "Organize your study schedule." },
+  { title: "Community Hub", icon: Users, path: "/community", description: "Connect with other learners." },
 ];
 
 function Dashboard() {
   const { level } = useLevel();
 
   return (
-    <div>
-      <div className="mb-8 p-6 bg-white rounded-xl shadow-md">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h1>
-        <p className="text-gray-600">
-          Your current learning level is set to <span className="font-bold text-blue-600">{level}</span>.
-        </p>
-        <p className="text-gray-600">Let's continue your language learning journey.</p>
+    <div className="space-y-8">
+      <div className="p-8 bg-white rounded-2xl shadow-card">
+        <h1 className="text-4xl font-bold mb-2">Welcome Back!</h1>
+        <p className="text-text-secondary text-lg">Your current proficiency level is set to <span className="font-bold text-primary">{level}</span>.</p>
+        <p className="text-text-secondary text-lg mt-1">Continue your learning journey and explore the features below.</p>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {featureCards.map((card) => (
-          <Link to={card.path} key={card.path} className={`bg-gradient-to-br ${card.color} text-white p-6 rounded-xl shadow-lg hover:scale-105 transform transition-transform duration-300 flex flex-col justify-between`}>
-            <div>
-              <card.icon className="w-12 h-12 mb-4" />
-              <h2 className="text-2xl font-bold mb-2">{card.title}</h2>
-              <p className="opacity-90">{card.description}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {featureCards.map((feature, index) => (
+          <Link 
+            to={feature.path} 
+            key={index} 
+            className="group bg-white p-6 rounded-2xl shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
+          >
+            <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
+              <feature.icon className="w-6 h-6 text-primary" />
             </div>
+            <h2 className="text-2xl font-bold mb-1">{feature.title}</h2>
+            <p className="text-text-secondary">{feature.description}</p>
           </Link>
         ))}
       </div>
