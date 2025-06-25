@@ -1,18 +1,6 @@
-import React from 'react';
-import { Bot, Flame, Star, Zap, Bell, Moon, Sun, Settings, User } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Bot, Bell } from 'lucide-react';
+import { BookOpen, Users, Calendar, BarChart2, MessageSquare, GraduationCap } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { BookOpen, Brain, MessageCircle, Trophy, Users, Calendar, BarChart2, MessageSquare, GraduationCap } from 'lucide-react';
-
-const navigationItems = [
-  { path: '/', label: 'Dashboard', icon: BarChart2 },
-  { path: '/level-selection', label: 'Levels', icon: Trophy },
-  { path: '/vocabulary-builder', label: 'Vocabulary', icon: BookOpen },
-  { path: '/quiz', label: 'Quiz', icon: Brain },
-  { path: '/conversation-practice', label: 'Practice', icon: MessageCircle },
-  { path: '/study-planner', label: 'Planner', icon: Calendar },
-  { path: '/community-hub', label: 'Community', icon: Users },
-];
 
 function Header() {
   const navLinkClasses = "flex items-center px-4 py-2 rounded-lg text-text-secondary hover:bg-secondary hover:text-primary transition-colors";
