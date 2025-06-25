@@ -147,15 +147,54 @@ export const conversationData: ConversationData = {
       ]
     },
     // Placeholders for 11-50
-    ...Array.from({length: 40}, (_, i) => ({
-      title: `Beginner Scenario ${i+11}`,
-      description: `Placeholder scenario for beginner level, number ${i+11}.`,
+    {
+      title: "Visiting the Doctor",
+      description: "Practice describing symptoms and understanding doctor's advice.",
+      dialog: [
+        { speaker: 'ai', text: "Good morning. What brings you in today?", responses: ["I have a sore throat.", "I'm feeling dizzy.", "I have a fever."] },
+        { speaker: 'user', text: "I have a sore throat." },
+        { speaker: 'ai', text: "How long have you had this symptom?", responses: ["For two days.", "Since last night."] },
+        { speaker: 'user', text: "For two days." },
+        { speaker: 'ai', text: "Do you have any other symptoms?", responses: ["Yes, a cough.", "No, just the sore throat."] },
+        { speaker: 'user', text: "Yes, a cough." },
+        { speaker: 'ai', text: "I'll prescribe you some medicine. Drink plenty of fluids and rest." }
+      ]
+    },
+    {
+      title: "At the Airport Check-in",
+      description: "Practice checking in for a flight and asking about luggage.",
+      dialog: [
+        { speaker: 'ai', text: "Good afternoon. May I see your ticket and passport?", responses: ["Here you go.", "Do you need my ID too?"] },
+        { speaker: 'user', text: "Here you go." },
+        { speaker: 'ai', text: "Do you have any bags to check in?", responses: ["Yes, one suitcase.", "No, just carry-on."] },
+        { speaker: 'user', text: "Yes, one suitcase." },
+        { speaker: 'ai', text: "Please place it on the scale. Would you like a window or aisle seat?", responses: ["Window, please.", "Aisle, please."] },
+        { speaker: 'user', text: "Window, please." },
+        { speaker: 'ai', text: "All set! Here is your boarding pass. Gate 12." }
+      ]
+    },
+    {
+      title: "Ordering Food Delivery",
+      description: "Practice ordering food over the phone and clarifying details.",
+      dialog: [
+        { speaker: 'ai', text: "Hello, thank you for calling Pizza Place. How can I help you?", responses: ["I'd like to order a pizza.", "Do you have salads?"] },
+        { speaker: 'user', text: "I'd like to order a pizza." },
+        { speaker: 'ai', text: "What size would you like?", responses: ["Large.", "Medium."] },
+        { speaker: 'user', text: "Large." },
+        { speaker: 'ai', text: "What toppings?", responses: ["Pepperoni and mushrooms.", "Just cheese."] },
+        { speaker: 'user', text: "Pepperoni and mushrooms." },
+        { speaker: 'ai', text: "Great! Your total is $15. It will arrive in 30 minutes." }
+      ]
+    },
+    ...Array.from({length: 37}, (_, i) => ({
+      title: `Beginner Scenario ${i+14}`,
+      description: `Placeholder scenario for beginner level, number ${i+14}.`,
       dialog: [
         { speaker: 'ai' as const, text: "This is a placeholder conversation. Ready to practice?", responses: ["Yes!", "Maybe later."] },
         { speaker: 'user' as const, text: "Yes!" },
         { speaker: 'ai' as const, text: "Great! Let's continue practicing." }
       ]
-    }))
+    })),
   ],
   Intermediate: [
     // 1
@@ -285,15 +324,54 @@ export const conversationData: ConversationData = {
       ]
     },
     // Placeholders for 11-50
-    ...Array.from({length: 40}, (_, i) => ({
-      title: `Intermediate Scenario ${i+11}`,
-      description: `Placeholder scenario for intermediate level, number ${i+11}.`,
+    {
+      title: "Handling a Lost Item",
+      description: "Practice reporting and recovering a lost item in public.",
+      dialog: [
+        { speaker: 'ai', text: "Can I help you?", responses: ["I lost my wallet.", "I'm looking for lost and found."] },
+        { speaker: 'user', text: "I lost my wallet." },
+        { speaker: 'ai', text: "Where did you last see it?", responses: ["On the bus.", "In the café."] },
+        { speaker: 'user', text: "On the bus." },
+        { speaker: 'ai', text: "Can you describe it?", responses: ["It's black and small.", "It has my name inside."] },
+        { speaker: 'user', text: "It's black and small." },
+        { speaker: 'ai', text: "We'll contact you if we find it. Please leave your phone number." }
+      ]
+    },
+    {
+      title: "Discussing Weekend Plans",
+      description: "Practice making and responding to social invitations.",
+      dialog: [
+        { speaker: 'ai', text: "Do you have any plans for the weekend?", responses: ["Not yet.", "Yes, I'm going hiking."] },
+        { speaker: 'user', text: "Not yet." },
+        { speaker: 'ai', text: "Would you like to join us for a picnic?", responses: ["That sounds fun!", "Maybe next time."] },
+        { speaker: 'user', text: "That sounds fun!" },
+        { speaker: 'ai', text: "Great! We'll meet at the park at noon.", responses: ["See you there!", "Should I bring anything?"] },
+        { speaker: 'user', text: "Should I bring anything?" },
+        { speaker: 'ai', text: "Just bring yourself and maybe a snack to share." }
+      ]
+    },
+    {
+      title: "Making a Complaint",
+      description: "Practice expressing dissatisfaction and requesting a solution.",
+      dialog: [
+        { speaker: 'ai', text: "How can I help you today?", responses: ["My order is wrong.", "I'd like to make a complaint."] },
+        { speaker: 'user', text: "My order is wrong." },
+        { speaker: 'ai', text: "I'm sorry to hear that. What was the problem?", responses: ["I received the wrong item.", "My food is cold."] },
+        { speaker: 'user', text: "I received the wrong item." },
+        { speaker: 'ai', text: "Let me check your order. Would you like a replacement or a refund?", responses: ["A replacement, please.", "A refund, please."] },
+        { speaker: 'user', text: "A replacement, please." },
+        { speaker: 'ai', text: "We'll send a new one right away. Sorry for the inconvenience." }
+      ]
+    },
+    ...Array.from({length: 37}, (_, i) => ({
+      title: `Intermediate Scenario ${i+14}`,
+      description: `Placeholder scenario for intermediate level, number ${i+14}.`,
       dialog: [
         { speaker: 'ai' as const, text: "This is a placeholder conversation. Ready to practice?", responses: ["Yes!", "Maybe later."] },
         { speaker: 'user' as const, text: "Yes!" },
         { speaker: 'ai' as const, text: "Great! Let's continue practicing." }
       ]
-    }))
+    })),
   ],
   Advanced: [
     // 1
@@ -421,14 +499,53 @@ export const conversationData: ConversationData = {
       ]
     },
     // Placeholders for 11-50
-    ...Array.from({length: 40}, (_, i) => ({
-      title: `Advanced Scenario ${i+11}`,
-      description: `Placeholder scenario for advanced level, number ${i+11}.`,
+    {
+      title: "Job Interview Follow-up",
+      description: "Practice following up after a job interview and asking for feedback.",
+      dialog: [
+        { speaker: 'ai', text: "Thank you for coming in last week. Do you have any questions?", responses: ["Yes, do you have any feedback?", "When will I hear back?"] },
+        { speaker: 'user', text: "Yes, do you have any feedback?" },
+        { speaker: 'ai', text: "You did well. We liked your experience. Is there anything else you'd like to add?", responses: ["I'm very interested in the position.", "No, thank you."] },
+        { speaker: 'user', text: "I'm very interested in the position." },
+        { speaker: 'ai', text: "Great! We'll contact you soon.", responses: ["Thank you for your time.", "Looking forward to it."] },
+        { speaker: 'user', text: "Thank you for your time." },
+        { speaker: 'ai', text: "Have a great day!" }
+      ]
+    },
+    {
+      title: "Debating a News Article",
+      description: "Practice discussing and debating a current event.",
+      dialog: [
+        { speaker: 'ai', text: "Did you read the article about climate change?", responses: ["Yes, I did.", "No, what did it say?"] },
+        { speaker: 'user', text: "Yes, I did." },
+        { speaker: 'ai', text: "What did you think of the author's argument?", responses: ["It was convincing.", "I disagreed with some points."] },
+        { speaker: 'user', text: "It was convincing." },
+        { speaker: 'ai', text: "Do you think individuals can make a difference?", responses: ["Yes, every action counts.", "It's mostly up to governments."] },
+        { speaker: 'user', text: "Yes, every action counts." },
+        { speaker: 'ai', text: "Interesting perspective. Thanks for sharing." }
+      ]
+    },
+    {
+      title: "Negotiating a Lease",
+      description: "Practice negotiating terms for renting an apartment.",
+      dialog: [
+        { speaker: 'ai', text: "The monthly rent is $1200. Are you comfortable with that?", responses: ["Is there any flexibility?", "Can utilities be included?"] },
+        { speaker: 'user', text: "Is there any flexibility?" },
+        { speaker: 'ai', text: "We could lower it to $1150 if you sign a longer lease. Would that work?", responses: ["Yes, that's reasonable.", "I'd prefer a shorter lease."] },
+        { speaker: 'user', text: "Yes, that's reasonable." },
+        { speaker: 'ai', text: "Great. Do you have any other questions?", responses: ["Is parking included?", "No, that's all."] },
+        { speaker: 'user', text: "Is parking included?" },
+        { speaker: 'ai', text: "Yes, one spot is included. Welcome!" }
+      ]
+    },
+    ...Array.from({length: 37}, (_, i) => ({
+      title: `Advanced Scenario ${i+14}`,
+      description: `Placeholder scenario for advanced level, number ${i+14}.`,
       dialog: [
         { speaker: 'ai' as const, text: "This is a placeholder conversation. Ready to practice?", responses: ["Yes!", "Maybe later."] },
         { speaker: 'user' as const, text: "Yes!" },
         { speaker: 'ai' as const, text: "Great! Let's continue practicing." }
       ]
-    }))
+    })),
   ]
 }; 

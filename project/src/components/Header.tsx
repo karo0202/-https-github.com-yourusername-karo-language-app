@@ -17,11 +17,11 @@ function Header() {
             <BarChart2 className="w-5 h-5 mr-2" />
             Dashboard
           </NavLink>
-          <NavLink to="/levels" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+          <NavLink to="/level-selection" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <GraduationCap className="w-5 h-5 mr-2" />
             Levels
           </NavLink>
-          <NavLink to="/vocabulary" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+          <NavLink to="/vocabulary-builder" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <BookOpen className="w-5 h-5 mr-2" />
             Vocabulary
           </NavLink>
@@ -29,15 +29,15 @@ function Header() {
             <MessageSquare className="w-5 h-5 mr-2" />
             Quiz
           </NavLink>
-          <NavLink to="/practice" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+          <NavLink to="/conversation-practice" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <Bot className="w-5 h-5 mr-2" />
             Practice
           </NavLink>
-          <NavLink to="/planner" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+          <NavLink to="/study-planner" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <Calendar className="w-5 h-5 mr-2" />
             Planner
           </NavLink>
-          <NavLink to="/community" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+          <NavLink to="/community-hub" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <Users className="w-5 h-5 mr-2" />
             Community
           </NavLink>
