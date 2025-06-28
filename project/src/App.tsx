@@ -12,6 +12,7 @@ import ProgressTracking from './pages/ProgressTracking';
 import QuizSystem from './pages/QuizSystem';
 import StudyPlanner from './pages/StudyPlanner';
 import VocabularyBuilder from './pages/VocabularyBuilder';
+import KidsLearning from './pages/KidsLearning';
 import { LevelProvider } from './context/LevelContext';
 import { EventProvider } from './context/EventContext';
 import { ProgressProvider } from './context/ProgressContext';
@@ -37,6 +38,7 @@ function App() {
                   <Route path="/quiz" element={<QuizSystem />} />
                   <Route path="/study-planner" element={<StudyPlanner />} />
                   <Route path="/vocabulary-builder" element={<VocabularyBuilder />} />
+                  <Route path="/kids-learning" element={<KidsLearning />} />
                 </Routes>
               </main>
               </div>

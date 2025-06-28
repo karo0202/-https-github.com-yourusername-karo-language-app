@@ -1,15 +1,17 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useLevel } from '../context/LevelContext';
-import { BarChart2, BookOpen, MessageSquare, Users, GraduationCap, Calendar, Bot, Bell } from 'lucide-react';
+import { BarChart2, BookOpen, MessageSquare, Users, GraduationCap, Calendar, Bot, Bell, Baby } from 'lucide-react';
 
 const featureCards = [
-  { title: "Select Level", icon: GraduationCap, path: "/levels", description: "Choose your proficiency level." },
-  { title: "Vocabulary", icon: BookOpen, path: "/vocabulary", description: "Build your word bank." },
+  { title: "Select Level", icon: GraduationCap, path: "/level-selection", description: "Choose your proficiency level." },
+  { title: "Kids Learning", icon: Baby, path: "/kids-learning", description: "Fun English lessons for children." },
+  { title: "Vocabulary", icon: BookOpen, path: "/vocabulary-builder", description: "Build your word bank." },
   { title: "Quiz", icon: MessageSquare, path: "/quiz", description: "Test your knowledge." },
-  { title: "AI Practice", icon: Bot, path: "/practice", description: "Chat with an AI." },
-  { title: "Study Planner", icon: Calendar, path: "/planner", description: "Organize your study schedule." },
-  { title: "Community Hub", icon: Users, path: "/community", description: "Connect with other learners." },
+  { title: "Conversation Practice", icon: Bot, path: "/conversation-practice", description: "Practice speaking English." },
+  { title: "Study Planner", icon: Calendar, path: "/study-planner", description: "Organize your study schedule." },
+  { title: "Community Hub", icon: Users, path: "/community-hub", description: "Connect with other learners." },
+  { title: "Progress Tracking", icon: BarChart2, path: "/progress-tracking", description: "Track your learning progress." },
 ];
 
 function Dashboard() {
