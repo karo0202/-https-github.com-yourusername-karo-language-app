@@ -1,4 +1,4 @@
-import { Bot, Bell } from 'lucide-react';
+import { Bot, Bell, User } from 'lucide-react';
 import { BookOpen, Users, Calendar, BarChart2, MessageSquare, GraduationCap, Baby } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import VoiceControls from './VoiceControls';
@@ -21,6 +21,10 @@ function Header() {
           <NavLink to="/level-selection" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <GraduationCap className="w-5 h-5 mr-2" />
             Levels
+          </NavLink>
+          <NavLink to="/adult-learning" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+            <User className="w-5 h-5 mr-2" />
+            Adults
           </NavLink>
           <NavLink to="/kids-learning" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <Baby className="w-5 h-5 mr-2" />

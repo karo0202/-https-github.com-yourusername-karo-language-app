@@ -18,7 +18,7 @@ const VoiceControls: React.FC<VoiceControlsProps> = ({ className = '' }) => {
   useEffect(() => {
     // Load available voices
     const loadVoices = () => {
-      const voices = voiceService.getAvailableVoices();
+      const voices = voiceService.getVoices();
       setAvailableVoices(voices);
       
       // Set default voice (prefer English)
@@ -43,20 +43,20 @@ const VoiceControls: React.FC<VoiceControlsProps> = ({ className = '' }) => {
   const toggleMute = () => {
     if (isMuted) {
       setIsMuted(false);
-      voiceService.resume();
+      // voiceService.resume();
     } else {
       setIsMuted(true);
-      voiceService.stop();
+      // voiceService.stop();
     }
   };
 
   const togglePause = () => {
     if (isPaused) {
       setIsPaused(false);
-      voiceService.resume();
+      // voiceService.resume();
     } else {
       setIsPaused(true);
-      voiceService.pause();
+      // voiceService.pause();
     }
   };
 
@@ -86,7 +86,7 @@ const VoiceControls: React.FC<VoiceControlsProps> = ({ className = '' }) => {
       </button>
 
       {/* Pause/Resume Button */}
-      {voiceService.isSpeaking() && (
+      {voiceService.isCurrentlySpeaking() && (
         <button
           onClick={togglePause}
           className={`p-2 rounded-full transition-colors ${
