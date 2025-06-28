@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "recharts": "^2.15.4"
+  },
+  "scripts": {
+    "build": "cd project && npm run build"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "vite": "^7.0.0"
   }
 }
