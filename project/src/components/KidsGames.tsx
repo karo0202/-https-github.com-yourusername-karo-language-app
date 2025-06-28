@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Check, X, RotateCcw } from 'lucide-react';
+import voiceService from '../services/voiceService';
 
 interface TapGameProps {
   vocabulary: Array<{ english: string; emoji: string }>;
@@ -10,6 +11,7 @@ export const TapGame: React.FC<TapGameProps> = ({ vocabulary, onComplete }) => {
   const [currentWord, setCurrentWord] = useState('');
   const [score, setScore] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     if (vocabulary.length > 0) {
@@ -21,20 +23,42 @@ export const TapGame: React.FC<TapGameProps> = ({ vocabulary, onComplete }) => {
   const handleTap = (word: string) => {
     if (word === currentWord) {
       setScore(score + 1);
-      if (score + 1 >= vocabulary.length) {
-        setGameComplete(true);
-        onComplete();
-      } else {
-        const remainingWords = vocabulary.filter(v => v.english !== currentWord);
-        const randomWord = remainingWords[Math.floor(Math.random() * remainingWords.length)];
-        setCurrentWord(randomWord.english);
-      }
+      
+      // Play success sound/voice
+      voiceService.speakForKids("Great job! You found it!", () => {
+        if (score + 1 >= vocabulary.length) {
+          setGameComplete(true);
+          voiceService.speakForKids("Congratulations! You completed the game!", () => {
+            onComplete();
+          });
+        } else {
+          const remainingWords = vocabulary.filter(v => v.english !== currentWord);
+          const randomWord = remainingWords[Math.floor(Math.random() * remainingWords.length)];
+          setCurrentWord(randomWord.english);
+          
+          // Play next word after a short delay
+          setTimeout(() => {
+            playWord();
+          }, 1000);
+        }
+      });
+    } else {
+      // Play correction sound/voice
+      voiceService.speakForKids("Try again! Look for " + currentWord);
     }
   };
 
   const playWord = () => {
-    // In a real app, this would use text-to-speech
-    console.log('Playing word:', currentWord);
+    if (isSpeaking) {
+      voiceService.stop();
+      setIsSpeaking(false);
+      return;
+    }
+
+    setIsSpeaking(true);
+    voiceService.speakForKids("Find the " + currentWord, () => {
+      setIsSpeaking(false);
+    });
   };
 
   if (gameComplete) {
@@ -58,9 +82,13 @@ export const TapGame: React.FC<TapGameProps> = ({ vocabulary, onComplete }) => {
             <span className="text-2xl font-bold text-primary">{currentWord}</span>
             <button
               onClick={playWord}
-              className="bg-primary text-white p-2 rounded-full hover:bg-primary/90"
+              className={`p-2 rounded-full transition-colors ${
+                isSpeaking 
+                  ? 'bg-red-500 text-white hover:bg-red-600' 
+                  : 'bg-primary text-white hover:bg-primary/90'
+              }`}
             >
-              <Volume2 className="w-4 h-4" />
+              <Volume2 className={`w-4 h-4 ${isSpeaking ? 'animate-pulse' : ''}`} />
             </button>
           </div>
         </div>
@@ -95,6 +123,7 @@ export const DragGame: React.FC<DragGameProps> = ({ vocabulary, onComplete }) =>
 
   const handleDragStart = (word: string) => {
     setDraggedItem(word);
+    voiceService.speakForKids("Drag " + word + " to its definition");
   };
 
   const handleDrop = (definition: string) => {
@@ -102,10 +131,16 @@ export const DragGame: React.FC<DragGameProps> = ({ vocabulary, onComplete }) =>
       const correctWord = vocabulary.find(v => v.definition === definition)?.english;
       if (correctWord === draggedItem) {
         setMatches(prev => ({ ...prev, [draggedItem]: definition }));
+        voiceService.speakForKids("Perfect! " + draggedItem + " matches correctly!");
+        
         if (Object.keys(matches).length + 1 >= vocabulary.length) {
           setGameComplete(true);
-          onComplete();
+          voiceService.speakForKids("Excellent! You matched everything correctly!", () => {
+            onComplete();
+          });
         }
+      } else {
+        voiceService.speakForKids("Try again! That's not the right match.");
       }
       setDraggedItem(null);
     }
@@ -202,17 +237,25 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({ vocabulary, onComple
     const newFlipped = [...flipped, index];
     setFlipped(newFlipped);
 
+    // Play the word when card is flipped
+    voiceService.speakForKids(cards[index].english);
+
     if (lastFlipped === null) {
       setLastFlipped(index);
     } else {
       // Check if cards match
       if (cards[lastFlipped].pairId === cards[index].pairId) {
         setMatched([...matched, lastFlipped, index]);
+        voiceService.speakForKids("Great match! You found " + cards[index].english);
+        
         if (matched.length + 2 >= cards.length) {
-          onComplete();
+          voiceService.speakForKids("Congratulations! You found all the matches!", () => {
+            onComplete();
+          });
         }
       } else {
         // Hide cards after a delay
+        voiceService.speakForKids("Try again! Look for another " + cards[lastFlipped].english);
         setTimeout(() => {
           setFlipped(flipped.filter(i => i !== lastFlipped && i !== index));
         }, 1000);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { kidsLearningData, KidsLesson } from '../data/kidsLearningData';
 import { Star, Trophy, Award, Play, Volume2, BookOpen, Music, Gamepad2, PenTool } from 'lucide-react';
+import voiceService from '../services/voiceService';
 
 const KidsLearning: React.FC = () => {
   const [selectedLesson, setSelectedLesson] = useState<KidsLesson>(kidsLearningData[0]);
@@ -8,6 +9,7 @@ const KidsLearning: React.FC = () => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [showRewards, setShowRewards] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const handleLessonSelect = (lesson: KidsLesson) => {
     setSelectedLesson(lesson);
@@ -28,10 +30,30 @@ const KidsLearning: React.FC = () => {
     );
   };
 
-  const playVoiceLine = (text: string) => {
-    // In a real app, this would trigger text-to-speech
-    console.log('Playing voice line:', text);
-    // You could integrate with Web Speech API or a TTS service
+  const playVoiceLine = (text: string, characterName?: string) => {
+    if (isSpeaking) {
+      voiceService.stop();
+      setIsSpeaking(false);
+      return;
+    }
+
+    setIsSpeaking(true);
+    
+    if (characterName) {
+      voiceService.speakAsCharacter(text, characterName, () => {
+        setIsSpeaking(false);
+      });
+    } else {
+      voiceService.speakForKids(text, () => {
+        setIsSpeaking(false);
+      });
+    }
+  };
+
+  const playCharacterVoice = () => {
+    const character = selectedLesson.cartoonCharacters[currentCharacterIndex];
+    const voiceLine = character.voiceLines[0];
+    playVoiceLine(voiceLine, character.name);
   };
 
   const renderOverview = () => (
@@ -55,11 +77,15 @@ const KidsLearning: React.FC = () => {
             {selectedLesson.cartoonCharacters[currentCharacterIndex].personality}
           </p>
           <button
-            onClick={() => playVoiceLine(selectedLesson.cartoonCharacters[currentCharacterIndex].voiceLines[0])}
-            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center mx-auto"
+            onClick={playCharacterVoice}
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center mx-auto ${
+              isSpeaking 
+                ? 'bg-red-500 text-white hover:bg-red-600' 
+                : 'bg-primary text-white hover:bg-primary/90'
+            }`}
           >
-            <Volume2 className="w-4 h-4 mr-2" />
-            Listen to {selectedLesson.cartoonCharacters[currentCharacterIndex].name}
+            <Volume2 className={`w-4 h-4 mr-2 ${isSpeaking ? 'animate-pulse' : ''}`} />
+            {isSpeaking ? 'Stop' : `Listen to ${selectedLesson.cartoonCharacters[currentCharacterIndex].name}`}
           </button>
         </div>
       </div>
@@ -119,10 +145,12 @@ const KidsLearning: React.FC = () => {
                   <div className="text-lg">{line.text}</div>
                 </div>
                 <button
-                  onClick={() => playVoiceLine(line.text)}
-                  className="text-primary hover:text-primary/80"
+                  onClick={() => playVoiceLine(line.text, line.speaker)}
+                  className={`text-primary hover:text-primary/80 p-2 rounded-full ${
+                    isSpeaking ? 'bg-red-100' : 'hover:bg-gray-100'
+                  }`}
                 >
-                  <Volume2 className="w-5 h-5" />
+                  <Volume2 className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
                 </button>
               </div>
             </div>
@@ -172,10 +200,14 @@ const KidsLearning: React.FC = () => {
               
               <button
                 onClick={() => playVoiceLine(word.english)}
-                className="mt-4 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center mx-auto"
+                className={`mt-4 px-4 py-2 rounded-lg transition-colors flex items-center mx-auto ${
+                  isSpeaking 
+                    ? 'bg-red-500 text-white hover:bg-red-600' 
+                    : 'bg-primary text-white hover:bg-primary/90'
+                }`}
               >
-                <Volume2 className="w-4 h-4 mr-2" />
-                Listen
+                <Volume2 className={`w-4 h-4 mr-2 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                {isSpeaking ? 'Stop' : 'Listen'}
               </button>
             </div>
           </div>
@@ -200,10 +232,14 @@ const KidsLearning: React.FC = () => {
           <div className="text-center mt-4">
             <button
               onClick={() => playVoiceLine(selectedLesson.song.lyrics.join(' '))}
-              className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center mx-auto"
+              className={`px-6 py-3 rounded-lg transition-colors flex items-center mx-auto ${
+                isSpeaking 
+                  ? 'bg-red-500 text-white hover:bg-red-600' 
+                  : 'bg-primary text-white hover:bg-primary/90'
+              }`}
             >
-              <Music className="w-5 h-5 mr-2" />
-              Sing Along!
+              <Music className={`w-5 h-5 mr-2 ${isSpeaking ? 'animate-pulse' : ''}`} />
+              {isSpeaking ? 'Stop Singing' : 'Sing Along!'}
             </button>
           </div>
           <p className="text-center text-gray-600 mt-2">
@@ -228,6 +264,13 @@ const KidsLearning: React.FC = () => {
               <div className="text-sm text-gray-600">
                 {selectedLesson.writingPractice.instructions[index % selectedLesson.writingPractice.instructions.length]}
               </div>
+              <button
+                onClick={() => playVoiceLine(letter)}
+                className="mt-2 text-primary hover:text-primary/80 text-sm"
+              >
+                <Volume2 className="w-3 h-3 inline mr-1" />
+                Listen
+              </button>
             </div>
           ))}
         </div>
@@ -243,6 +286,13 @@ const KidsLearning: React.FC = () => {
               <div className="text-sm text-gray-600">
                 Trace the letters carefully
               </div>
+              <button
+                onClick={() => playVoiceLine(word)}
+                className="mt-2 text-primary hover:text-primary/80 text-sm"
+              >
+                <Volume2 className="w-3 h-3 inline mr-1" />
+                Listen
+              </button>
             </div>
           ))}
         </div>

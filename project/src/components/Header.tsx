@@ -1,6 +1,7 @@
 import { Bot, Bell } from 'lucide-react';
 import { BookOpen, Users, Calendar, BarChart2, MessageSquare, GraduationCap, Baby } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import VoiceControls from './VoiceControls';
 
 function Header() {
   const navLinkClasses = "flex items-center px-4 py-2 rounded-lg text-text-secondary hover:bg-secondary hover:text-primary transition-colors";
@@ -45,8 +46,9 @@ function Header() {
             <Users className="w-5 h-5 mr-2" />
             Community
           </NavLink>
-            </div>
+        </div>
         <div className="flex items-center space-x-4">
+          <VoiceControls />
           <button className="text-text-secondary hover:text-primary transition-colors">
             <Bell className="w-6 h-6" />
           </button>
