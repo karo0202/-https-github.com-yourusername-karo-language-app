@@ -215,12 +215,22 @@ export const kidsLearningData: KidsLesson[] = [
       },
       {
         type: 'match',
-        title: 'Match the Sound',
-        description: 'Match animal sounds to their pictures',
+        title: 'Memory Match',
+        description: 'Find matching pairs of animals',
+        instructions: [
+          "Click cards to flip them",
+          "Find two matching animals",
+          "Remember where each animal is!"
+        ]
+      },
+      {
+        type: 'drag',
+        title: 'Animal Sounds',
+        description: 'Match animals to their sounds',
         instructions: [
           "Listen to the animal sound",
-          "Drag the sound to the correct animal",
-          "Great job matching!"
+          "Drag it to the correct animal",
+          "Learn what each animal says!"
         ]
       }
     ],
@@ -426,6 +436,16 @@ export const kidsLearningData: KidsLesson[] = [
           "Look at the object",
           "Tap the correct color",
           "Great matching!"
+        ]
+      },
+      {
+        type: 'tap',
+        title: 'Find the Color',
+        description: 'Tap the color when you hear its name',
+        instructions: [
+          "Listen to the color name",
+          "Tap the correct color",
+          "Learn all the colors!"
         ]
       }
     ],

@@ -111,6 +111,112 @@ export const TapGame: React.FC<TapGameProps> = ({ vocabulary, onComplete }) => {
   );
 };
 
+interface ColorMatchGameProps {
+  vocabulary: Array<{ english: string; emoji: string }>;
+  onComplete: () => void;
+}
+
+export const ColorMatchGame: React.FC<ColorMatchGameProps> = ({ vocabulary, onComplete }) => {
+  const [currentColor, setCurrentColor] = useState('');
+  const [score, setScore] = useState(0);
+  const [gameComplete, setGameComplete] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  useEffect(() => {
+    if (vocabulary.length > 0) {
+      const randomColor = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+      setCurrentColor(randomColor.english);
+    }
+  }, [vocabulary]);
+
+  const handleColorTap = (color: string) => {
+    if (color === currentColor) {
+      setScore(score + 1);
+      
+      voiceService.speakForKids("Perfect! You found " + color, () => {
+        if (score + 1 >= vocabulary.length) {
+          setGameComplete(true);
+          voiceService.speakForKids("Amazing! You know all the colors!", () => {
+            onComplete();
+          });
+        } else {
+          const remainingColors = vocabulary.filter(v => v.english !== currentColor);
+          const randomColor = remainingColors[Math.floor(Math.random() * remainingColors.length)];
+          setCurrentColor(randomColor.english);
+          
+          setTimeout(() => {
+            playColor();
+          }, 1000);
+        }
+      });
+    } else {
+      voiceService.speakForKids("Try again! Look for " + currentColor);
+    }
+  };
+
+  const playColor = () => {
+    if (isSpeaking) {
+      voiceService.stop();
+      setIsSpeaking(false);
+      return;
+    }
+
+    setIsSpeaking(true);
+    voiceService.speakForKids("Find the color " + currentColor, () => {
+      setIsSpeaking(false);
+    });
+  };
+
+  if (gameComplete) {
+    return (
+      <div className="text-center p-8">
+        <div className="text-6xl mb-4">🎨</div>
+        <h3 className="text-2xl font-bold mb-2">Color Master!</h3>
+        <p className="text-lg text-gray-600">You know all the colors!</p>
+        <div className="text-3xl font-bold text-primary mt-4">Score: {score}/{vocabulary.length}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h3 className="text-xl font-bold mb-4">Find the Color</h3>
+        <div className="bg-blue-50 rounded-lg p-4 mb-4">
+          <p className="text-lg mb-2">Listen and tap:</p>
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-2xl font-bold text-primary">{currentColor}</span>
+            <button
+              onClick={playColor}
+              className={`p-2 rounded-full transition-colors ${
+                isSpeaking 
+                  ? 'bg-red-500 text-white hover:bg-red-600' 
+                  : 'bg-primary text-white hover:bg-primary/90'
+              }`}
+            >
+              <Volume2 className={`w-4 h-4 ${isSpeaking ? 'animate-pulse' : ''}`} />
+            </button>
+          </div>
+        </div>
+        <div className="text-sm text-gray-600">Score: {score}/{vocabulary.length}</div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {vocabulary.map((item, index) => (
+          <button
+            key={index}
+            onClick={() => handleColorTap(item.english)}
+            className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border-2 border-gray-200 hover:border-primary"
+          >
+            <div className="text-4xl mb-2">{item.emoji}</div>
+            <div className="text-sm font-medium">{item.english}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 interface DragGameProps {
   vocabulary: Array<{ english: string; emoji: string; definition: string }>;
   onComplete: () => void;
@@ -309,4 +415,4 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({ vocabulary, onComple
   );
 };
 
-export default { TapGame, DragGame, MatchingGame }; 
+export default { TapGame, DragGame, MatchingGame, ColorMatchGame }; 

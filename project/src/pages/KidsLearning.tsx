@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { kidsLearningData, KidsLesson } from '../data/kidsLearningData';
 import { Star, Trophy, Award, Play, Volume2, BookOpen, Music, Gamepad2, PenTool } from 'lucide-react';
 import voiceService from '../services/voiceService';
+import { TapGame, DragGame, MatchingGame, ColorMatchGame } from '../components/KidsGames';
+import WritingPractice from '../components/KidsWriting';
 
 const KidsLearning: React.FC = () => {
   const [selectedLesson, setSelectedLesson] = useState<KidsLesson>(kidsLearningData[0]);
@@ -10,12 +12,20 @@ const KidsLearning: React.FC = () => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [showRewards, setShowRewards] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [currentGame, setCurrentGame] = useState<string | null>(null);
+  const [gameScore, setGameScore] = useState(0);
+  const [completedGames, setCompletedGames] = useState<string[]>([]);
+  const [writingCompleted, setWritingCompleted] = useState(false);
 
   const handleLessonSelect = (lesson: KidsLesson) => {
     setSelectedLesson(lesson);
     setCurrentSection('overview');
     setCurrentCharacterIndex(0);
     setCurrentStoryIndex(0);
+    setCurrentGame(null);
+    setGameScore(0);
+    setCompletedGames([]);
+    setWritingCompleted(false);
   };
 
   const nextCharacter = () => {
@@ -54,6 +64,27 @@ const KidsLearning: React.FC = () => {
     const character = selectedLesson.cartoonCharacters[currentCharacterIndex];
     const voiceLine = character.voiceLines[0];
     playVoiceLine(voiceLine, character.name);
+  };
+
+  const startGame = (gameType: string) => {
+    setCurrentGame(gameType);
+    setGameScore(0);
+    voiceService.speakForKids(`Let's play ${gameType}! Have fun!`);
+  };
+
+  const handleGameComplete = (gameType: string) => {
+    setCompletedGames(prev => [...prev, gameType]);
+    setCurrentGame(null);
+    setGameScore(prev => prev + 10);
+    
+    // Award rewards based on completed games
+    if (completedGames.length + 1 >= selectedLesson.interactiveGames.length) {
+      voiceService.speakForKids("Amazing! You completed all the games! You're a superstar!", () => {
+        setShowRewards(true);
+      });
+    } else {
+      voiceService.speakForKids("Great job! You completed the game!");
+    }
   };
 
   const renderOverview = () => (
@@ -119,6 +150,40 @@ const KidsLearning: React.FC = () => {
           <div className="text-2xl mb-2">🏅</div>
           <div className="font-semibold">{selectedLesson.rewards.length}</div>
           <div className="text-sm text-gray-600">Rewards</div>
+        </div>
+      </div>
+
+      {/* Progress Section */}
+      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6">
+        <h3 className="text-xl font-bold mb-4 text-center">🎮 Your Progress</h3>
+        <div className="text-center">
+          <div className="text-3xl font-bold text-primary mb-2">{gameScore} Points</div>
+          <div className="text-sm text-gray-600 mb-4">
+            Completed Games: {completedGames.length}/{selectedLesson.interactiveGames.length}
+          </div>
+          <div className="flex justify-center space-x-2 mb-4">
+            {selectedLesson.interactiveGames.map((game, index) => (
+              <div
+                key={index}
+                className={`w-4 h-4 rounded-full ${
+                  completedGames.includes(game.title)
+                    ? 'bg-green-500'
+                    : 'bg-gray-300'
+                }`}
+                title={game.title}
+              />
+            ))}
+          </div>
+          <div className="flex items-center justify-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full ${writingCompleted ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+              <span className="text-sm text-gray-600">Writing</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full ${completedGames.length >= selectedLesson.interactiveGames.length ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+              <span className="text-sm text-gray-600">Games</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -252,89 +317,244 @@ const KidsLearning: React.FC = () => {
 
   const renderWriting = () => (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-center mb-6">✍️ Writing Practice</h3>
+      <h3 className="text-2xl font-bold text-center mb-6">✍️ Interactive Writing Practice</h3>
       
-      {/* Letters */}
+      {!writingCompleted ? (
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <WritingPractice
+            letters={selectedLesson.writingPractice.letters}
+            words={selectedLesson.writingPractice.words}
+            onComplete={() => {
+              setWritingCompleted(true);
+              voiceService.speakForKids("Amazing! You completed all the writing practice! You're a great writer!", () => {
+                setGameScore(prev => prev + 20);
+              });
+            }}
+          />
+        </div>
+      ) : (
+        <div className="text-center p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl">
+          <div className="text-6xl mb-4">🎉</div>
+          <h3 className="text-2xl font-bold mb-2">Writing Master!</h3>
+          <p className="text-lg text-gray-600 mb-4">You completed all the writing practice!</p>
+          <div className="text-3xl font-bold text-primary mb-4">+20 Points!</div>
+          <button
+            onClick={() => setWritingCompleted(false)}
+            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Practice Again
+          </button>
+        </div>
+      )}
+
+      {/* Writing Instructions */}
       <div className="bg-yellow-50 rounded-xl p-6">
-        <h4 className="text-xl font-semibold mb-4 text-center">Practice Letters</h4>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {selectedLesson.writingPractice.letters.map((letter, index) => (
-            <div key={index} className="bg-white rounded-lg p-4 text-center shadow hover:shadow-md transition-shadow">
-              <div className="text-4xl font-bold text-primary mb-2">{letter}</div>
-              <div className="text-sm text-gray-600">
-                {selectedLesson.writingPractice.instructions[index % selectedLesson.writingPractice.instructions.length]}
-              </div>
-              <button
-                onClick={() => playVoiceLine(letter)}
-                className="mt-2 text-primary hover:text-primary/80 text-sm"
-              >
-                <Volume2 className="w-3 h-3 inline mr-1" />
-                Listen
-              </button>
-            </div>
-          ))}
+        <h4 className="text-xl font-semibold mb-4 text-center">📝 Writing Tips</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <h5 className="font-semibold">For Letters:</h5>
+            <ul className="text-sm text-gray-700 space-y-1">
+              <li>• Start at the top and go down</li>
+              <li>• Follow the guide lines</li>
+              <li>• Make big, clear strokes</li>
+              <li>• Take your time</li>
+            </ul>
+          </div>
+          <div className="space-y-2">
+            <h5 className="font-semibold">For Words:</h5>
+            <ul className="text-sm text-gray-700 space-y-1">
+              <li>• Write each letter carefully</li>
+              <li>• Leave space between letters</li>
+              <li>• Follow the tracing guide</li>
+              <li>• Practice makes perfect!</li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      {/* Words */}
+      {/* Writing Tools Info */}
       <div className="bg-blue-50 rounded-xl p-6">
-        <h4 className="text-xl font-semibold mb-4 text-center">Practice Words</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {selectedLesson.writingPractice.words.map((word, index) => (
-            <div key={index} className="bg-white rounded-lg p-4 text-center shadow hover:shadow-md transition-shadow">
-              <div className="text-2xl font-bold text-primary mb-2">{word}</div>
-              <div className="text-sm text-gray-600">
-                Trace the letters carefully
-              </div>
-              <button
-                onClick={() => playVoiceLine(word)}
-                className="mt-2 text-primary hover:text-primary/80 text-sm"
-              >
-                <Volume2 className="w-3 h-3 inline mr-1" />
-                Listen
-              </button>
-            </div>
-          ))}
+        <h4 className="text-xl font-semibold mb-4 text-center">🛠️ How to Use</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <div>
+            <div className="text-2xl mb-2">🖱️</div>
+            <h5 className="font-semibold">Mouse</h5>
+            <p className="text-sm text-gray-600">Click and drag to write</p>
+          </div>
+          <div>
+            <div className="text-2xl mb-2">👆</div>
+            <h5 className="font-semibold">Touch</h5>
+            <p className="text-sm text-gray-600">Use your finger on tablets</p>
+          </div>
+          <div>
+            <div className="text-2xl mb-2">🗑️</div>
+            <h5 className="font-semibold">Clear</h5>
+            <p className="text-sm text-gray-600">Start over anytime</p>
+          </div>
         </div>
       </div>
     </div>
   );
 
-  const renderGames = () => (
-    <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-center mb-6">🎮 Interactive Games</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {selectedLesson.interactiveGames.map((game, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="text-4xl mb-3">
-                {game.type === 'tap' && '👆'}
-                {game.type === 'drag' && '🖱️'}
-                {game.type === 'match' && '🔗'}
-                {game.type === 'trace' && '✏️'}
-              </div>
-              <h4 className="text-xl font-semibold">{game.title}</h4>
-              <p className="text-gray-600">{game.description}</p>
-            </div>
-            
-            <div className="space-y-2 mb-4">
-              {game.instructions.map((instruction, idx) => (
-                <div key={idx} className="flex items-center space-x-2 text-sm">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <span>{instruction}</span>
-                </div>
-              ))}
-            </div>
-            
-            <button className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center">
-              <Gamepad2 className="w-5 h-5 mr-2" />
-              Play Game
+  const renderGames = () => {
+    // If a game is currently active, render it
+    if (currentGame) {
+      const gameData = selectedLesson.interactiveGames.find(g => g.title === currentGame);
+      
+      if (!gameData) return null;
+
+      // Prepare vocabulary data for games
+      const vocabularyForGames = selectedLesson.vocabulary.map(word => ({
+        english: word.english,
+        emoji: word.emoji,
+        definition: word.definition
+      }));
+
+      return (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold">🎮 {currentGame}</h3>
+            <button
+              onClick={() => setCurrentGame(null)}
+              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              Back to Games
             </button>
           </div>
-        ))}
+
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            {currentGame === 'Tap the Animal' && (
+              <TapGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+            
+            {currentGame === 'Drag and Match' && (
+              <DragGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+            
+            {currentGame === 'Memory Match' && (
+              <MatchingGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+
+            {currentGame === 'Animal Sounds' && (
+              <DragGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+
+            {currentGame === 'Color the Picture' && (
+              <DragGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+
+            {currentGame === 'Color Match' && (
+              <DragGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+
+            {currentGame === 'Find the Color' && (
+              <ColorMatchGame
+                vocabulary={vocabularyForGames}
+                onComplete={() => handleGameComplete(currentGame)}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Render game selection
+    return (
+      <div className="space-y-6">
+        <h3 className="text-2xl font-bold text-center mb-6">🎮 Interactive Games</h3>
+        
+        {/* Game Progress */}
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 mb-6">
+          <h4 className="text-xl font-semibold text-center mb-4">Your Progress</h4>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-primary mb-2">{gameScore} Points</div>
+            <div className="text-sm text-gray-600">
+              Completed: {completedGames.length}/{selectedLesson.interactiveGames.length} Games
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {selectedLesson.interactiveGames.map((game, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+              <div className="text-center mb-4">
+                <div className="text-4xl mb-3">
+                  {game.type === 'tap' && '👆'}
+                  {game.type === 'drag' && '🖱️'}
+                  {game.type === 'match' && '🔗'}
+                  {game.type === 'trace' && '✏️'}
+                </div>
+                <h4 className="text-xl font-semibold">{game.title}</h4>
+                <p className="text-gray-600">{game.description}</p>
+                
+                {/* Completion Status */}
+                {completedGames.includes(game.title) && (
+                  <div className="mt-2 text-green-600 font-semibold">
+                    ✅ Completed!
+                  </div>
+                )}
+              </div>
+              
+              <div className="space-y-2 mb-4">
+                {game.instructions.map((instruction, idx) => (
+                  <div key={idx} className="flex items-center space-x-2 text-sm">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>{instruction}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <button
+                onClick={() => startGame(game.title)}
+                className={`w-full py-3 rounded-lg transition-colors flex items-center justify-center ${
+                  completedGames.includes(game.title)
+                    ? 'bg-green-500 text-white hover:bg-green-600'
+                    : 'bg-primary text-white hover:bg-primary/90'
+                }`}
+              >
+                <Gamepad2 className="w-5 h-5 mr-2" />
+                {completedGames.includes(game.title) ? 'Play Again' : 'Play Game'}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* All Games Completed Celebration */}
+        {completedGames.length >= selectedLesson.interactiveGames.length && (
+          <div className="text-center p-8 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl">
+            <div className="text-6xl mb-4">🎉</div>
+            <h3 className="text-2xl font-bold mb-2">Congratulations!</h3>
+            <p className="text-lg text-gray-600 mb-4">You've completed all the games!</p>
+            <button
+              onClick={() => setShowRewards(true)}
+              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all"
+            >
+              <Trophy className="w-5 h-5 inline mr-2" />
+              View Rewards
+            </button>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderTranslations = () => (
     <div className="space-y-6">
