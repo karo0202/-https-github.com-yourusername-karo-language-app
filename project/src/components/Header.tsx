@@ -41,7 +41,7 @@ function Header() {
             <Users className="w-5 h-5 mr-2" />
             Community
           </NavLink>
-        </div>
+            </div>
         <div className="flex items-center space-x-4">
           <button className="text-text-secondary hover:text-primary transition-colors">
             <Bell className="w-6 h-6" />

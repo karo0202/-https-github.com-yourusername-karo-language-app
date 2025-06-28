@@ -37,7 +37,7 @@ function App() {
                 <Route path="/vocabulary-builder" element={<VocabularyBuilder />} />
               </Routes>
             </main>
-          </div>
+            </div>
         </EventProvider>
       </ProgressProvider>
     </LevelProvider>
