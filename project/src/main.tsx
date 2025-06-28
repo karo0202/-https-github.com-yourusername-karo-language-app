@@ -30,14 +30,15 @@ window.addEventListener('message', (event) => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <UserProvider>
-    <BrowserRouter basename="/karo-language-app/">
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/adult-learning" element={<AdultLearning />} />
-        <Route path="/adult-learning/level-1" element={<Level1 />} />
-        <Route path="/adult-learning/level-2" element={<Level2 />} />
-        <Route path="/adult-learning/level-3" element={<Level3 />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>,
-)
+      <BrowserRouter basename="/karo-language-app/">
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/adult-learning" element={<AdultLearning />} />
+          <Route path="/adult-learning/level-1" element={<Level1 />} />
+          <Route path="/adult-learning/level-2" element={<Level2 />} />
+          <Route path="/adult-learning/level-3" element={<Level3 />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
+  </React.StrictMode>
+);

@@ -1,5 +1,5 @@
-import { Bot, Bell, User } from 'lucide-react';
-import { BookOpen, Users, Calendar, BarChart2, MessageSquare, GraduationCap, Baby } from 'lucide-react';
+import { Bell, User } from 'lucide-react';
+import { Users, Calendar, BarChart2, Baby } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import VoiceControls from './VoiceControls';
 
@@ -18,10 +18,6 @@ function Header() {
             <BarChart2 className="w-5 h-5 mr-2" />
             Dashboard
           </NavLink>
-          <NavLink to="/level-selection" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
-            <GraduationCap className="w-5 h-5 mr-2" />
-            Levels
-          </NavLink>
           <NavLink to="/adult-learning" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <User className="w-5 h-5 mr-2" />
             Adults
@@ -29,18 +25,6 @@ function Header() {
           <NavLink to="/kids-learning" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <Baby className="w-5 h-5 mr-2" />
             Kids
-          </NavLink>
-          <NavLink to="/vocabulary-builder" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
-            <BookOpen className="w-5 h-5 mr-2" />
-            Vocabulary
-          </NavLink>
-          <NavLink to="/quiz" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
-            <MessageSquare className="w-5 h-5 mr-2" />
-            Quiz
-          </NavLink>
-          <NavLink to="/conversation-practice" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
-            <Bot className="w-5 h-5 mr-2" />
-            Practice
           </NavLink>
           <NavLink to="/study-planner" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
             <Calendar className="w-5 h-5 mr-2" />

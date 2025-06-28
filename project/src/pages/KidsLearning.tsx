@@ -6,6 +6,8 @@ import { TapGame, DragGame, MatchingGame, ColorMatchGame } from '../components/K
 import WritingPractice from '../components/KidsWriting';
 
 const KidsLearning: React.FC = () => {
+  // DEBUG: Confirm component is rendering
+  console.log('KidsLearning component mounted');
   const [selectedLesson, setSelectedLesson] = useState<KidsLesson>(kidsLearningData[0]);
   const [currentSection, setCurrentSection] = useState<'overview' | 'story' | 'vocabulary' | 'song' | 'writing' | 'games' | 'translations'>('overview');
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
